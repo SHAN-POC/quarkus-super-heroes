@@ -202,6 +202,15 @@ public class VillainResourceTest {
         assertEquals(NB_VILLAINS, villains.size());
     }
 
+    @Test
+    public void shouldPingOpenAPI() {
+        given()
+            .header(ACCEPT, JSON)
+            .when().get("/q/openapi")
+            .then()
+            .statusCode(OK.getStatusCode());
+    }
+
     private TypeRef<List<Villain>> getVillainTypeRef() {
         return new TypeRef<>() {
         };
