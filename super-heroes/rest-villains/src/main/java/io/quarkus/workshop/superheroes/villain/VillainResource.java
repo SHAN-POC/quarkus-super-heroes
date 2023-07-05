@@ -1,6 +1,5 @@
 package io.quarkus.workshop.superheroes.villain;
 
-import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
