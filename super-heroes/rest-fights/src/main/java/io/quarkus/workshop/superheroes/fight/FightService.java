@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
 import java.util.Random;
+import org.eclipse.microprofile.faulttolerance.Fallback;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jboss.logging.Logger;
 
@@ -47,10 +48,12 @@ public class FightService {
         return fighters;
     }
 
+    @Fallback(fallbackMethod = "fallbackRandomVillain")
     Villain findRandomVillain() {
         return villainProxy.findRandomVillain();
     }
 
+    @Fallback(fallbackMethod = "fallbackRandomHero")
     Hero findRandomHero() {
         return heroProxy.findRandomHero();
     }
@@ -78,6 +81,25 @@ public class FightService {
         return fight;
     }
 
+    public Hero fallbackRandomHero() {
+        logger.warn("Falling back on Hero");
+        Hero hero = new Hero();
+        hero.name = "Fallback hero";
+        hero.picture = "https://dummyimage.com/280x380/1e8fff/ffffff&text=Fallback+Hero";
+        hero.powers = "Fallback hero powers";
+        hero.level = 1;
+        return hero;
+    }
+
+    public Villain fallbackRandomVillain() {
+        logger.warn("Falling back on Villain");
+        Villain villain = new Villain();
+        villain.name = "Fallback villain";
+        villain.picture = "https://dummyimage.com/280x380/b22222/ffffff&text=Fallback+Villain";
+        villain.powers = "Fallback villain powers";
+        villain.level = 42;
+        return villain;
+    }
     private Fight heroWon(Fighters fighters) {
         logger.info("Yes, Hero won :o)");
         Fight fight = new Fight();
